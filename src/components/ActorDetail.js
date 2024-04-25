@@ -1,30 +1,40 @@
-// import React from 'react';
-
-// function ActorDetail({ actor }) {
-//   if (!actor) return null;
-
-//   return (
-//     <div className="actor-detail">
-//       <h1>{actor.name}</h1>
-//       <p>Height: {actor.height}</p>
-//       <p>Birth Year: {actor.birth_year}</p>
-//     </div>
-//   );
-// }
-
-// export default ActorDetail;
-
-
-import React from 'react';
+//actordetail.js
+import React, { useState, useEffect } from 'react';
 
 function ActorDetail({ actor }) {
-  if (!actor) return null;
+  const [details, setDetails] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (actor && actor.url) {
+      fetch(actor.url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setDetails(data.result.properties); // assuming properties contain the details
+          setLoading(false);
+        })
+        .catch(error => {
+          setError(error.toString());
+          setLoading(false);
+        });
+    }
+  }, [actor]);
+
+  if (loading) return <div>Loading details...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!details) return <div>No details available.</div>;
 
   return (
     <div className="actor-detail">
-      <h1>{actor.name}</h1>
-      <p>Height: {actor.height}</p>
-      <p>Birth Year: {actor.birth_year}</p>
+      <h1>{details.name}</h1>
+      <p>Height: {details.height}</p>
+      <p>Birth Year: {details.birth_year}</p>
     </div>
   );
 }
