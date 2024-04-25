@@ -1,4 +1,3 @@
-//actordetail.js
 import React, { useState, useEffect } from 'react';
 
 function ActorDetail({ actor }) {
@@ -16,7 +15,7 @@ function ActorDetail({ actor }) {
           return response.json();
         })
         .then(data => {
-          setDetails(data.result.properties); // assuming properties contain the details
+          setDetails(data.result.properties);
           setLoading(false);
         })
         .catch(error => {

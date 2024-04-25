@@ -1,4 +1,3 @@
-//actorlist.js
 import React, { useState, useEffect } from 'react';
 import ActorDetail from './ActorDetail';
 
